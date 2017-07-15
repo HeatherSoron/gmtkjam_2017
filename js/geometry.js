@@ -53,6 +53,10 @@ Point.prototype.minus = function(other) {
 	return this.clone().offsetBy(other.times(-1));
 }
 
+Point.prototype.dot = function(other) {
+	return this.x * other.x + this.y * other.y;
+}
+
 Point.prototype.clone = function() {
 	return new Point(this.x, this.y);
 }
@@ -106,7 +110,7 @@ Rectangle.prototype.sides = function() {
 }
 
 Rectangle.prototype.lineIntersections = function(p1, p2) {
-	return this.sides().map(side => line_intersect(side[0].x, side[0].y, side[1].x, side[1].y, p1.x, p1.y, p2.x, p2.y));
+	return this.sides().map(side => [[p1, p2], line_intersect(side[0].x, side[0].y, side[1].x, side[1].y, p1.x, p1.y, p2.x, p2.y)]);
 }
 
 

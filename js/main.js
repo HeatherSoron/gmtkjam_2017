@@ -10,6 +10,7 @@ function setupGameWorld() {
 	
 	game.player = new Player(50, 50);
 	game.world = new World();
+	game.gravity = 20;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
