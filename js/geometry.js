@@ -20,6 +20,11 @@ Point.prototype.distTo = function(other) {
 	return this.minus(other).length();
 }
 
+// useful for inverse square law stuff, and such
+Point.prototype.sqrDistTo = function(other) {
+	return this.minus(other).lenSqrd();
+}
+
 Point.prototype.isZero = function() {
 	return !(this.x || this.y);
 }

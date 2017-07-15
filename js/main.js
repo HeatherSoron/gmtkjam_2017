@@ -9,6 +9,7 @@ function setupGameWorld() {
 	// put game-specific initialization in here
 	
 	game.player = new Player(50, 50);
+	game.core = new Macguffin(200, 50);
 	game.world = new World();
 	game.gravity = 20;
 }
@@ -25,9 +26,14 @@ function updateGame() {
 	var player = game.player;
 	if (mouseState.button) {
 		player.velocity.offsetBy(mouseState.minus(player.body));
+
+		var attraction = player.body.minus(game.core.body).times(100 * 1 / player.body.distTo(game.core.body))
+		game.core.velocity.offsetBy(attraction);
+		player.velocity.offsetBy(attraction.times(-1));
 	}
 
 	player.move();
+	game.core.move();
 }
 
 function renderGame() {
@@ -35,6 +41,7 @@ function renderGame() {
 	clearScreen();
 	
 	game.player.render();
+	game.core.render();
 	game.world.render();
 }
 
