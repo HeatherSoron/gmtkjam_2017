@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+
+var deps = {};
+
+var dir = fs.readdirSync('js');
+dir.forEach(function(filename) {
+	// don't want any of the hidden dot files
+	if (filename[0] == '.') {
+		return;
+	}
+
+	var lines = fs.readFileSync('js/' + filename).toString().split('\n');
+	lines.filter(function(el) { return el.indexOf('Class.makeClass' !== -1) }).forEach(function(line) {
+		var matches = line.match(/Class\.makeClass\((\w+),\s*function (\w+)/);
+		if (matches) {
+			deps[matches[2]] = {
+				dep: matches[1],
+				file: filename,
+			};
+		}
+	});
+});
+
+var includes = [];
+while (Object.keys(deps).length) {
+	for (var key in deps) {
+		if (!(deps[key].dep in deps)) {
+			if (includes.indexOf(deps[key].file) == -1) {
+				includes.push(deps[key].file);
+			}
+			delete(deps[key]);
+		}
+	}
+}
+
+console.log(includes.map(function(el) { return 'script(src="js/' + el + '")'; }).join('\n'));

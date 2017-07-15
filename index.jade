@@ -1,0 +1,18 @@
+html
+	head
+		script(src="js/class.js")
+
+		include ./jade/scripts.jade
+		
+		script(src="js/init.js")
+		script(src="js/keymap.js")
+		script(src="js/input.js")
+		script(src="js/main.js")
+
+		style
+			|canvas {
+			|	/* by putting a border around the canvas, we can see where it is more easily */
+			|	border: 1px solid black;
+			|}
+	body(onload="init()")
+		canvas#game(width=800 height=600)
