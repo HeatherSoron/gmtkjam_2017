@@ -25,10 +25,8 @@ function updateGame() {
 	if (mouseState.button) {
 		player.velocity.offsetBy(mouseState.minus(player.body));
 	}
-	
-	var speed = 0.01;
 
-	player.body.offsetBy(player.velocity.times(speed));
+	player.move();
 }
 
 function renderGame() {

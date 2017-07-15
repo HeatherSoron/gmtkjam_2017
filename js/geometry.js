@@ -90,3 +90,39 @@ Rectangle.prototype.intersects = function(other) {
 Rectangle.prototype.clone = function() {
 	return new Rectangle(this.left, this.top, this.width, this.height);
 }
+
+// static method
+Rectangle.from = function(obj) {
+	return new Rectangle(obj.x - obj.width/2, obj.y - obj.height/2, obj.width, obj.height);
+}
+
+Rectangle.prototype.sides = function() {
+	return [
+		[new Point(this.left, this.top), new Point(this.right, this.top)],
+		[new Point(this.right, this.top), new Point(this.right, this.bottom)],
+		[new Point(this.right, this.bottom), new Point(this.left, this.bottom)],
+		[new Point(this.left, this.bottom), new Point(this.left, this.top)],
+	];
+}
+
+Rectangle.prototype.lineIntersections = function(p1, p2) {
+	return this.sides().map(side => line_intersect(side[0].x, side[0].y, side[1].x, side[1].y, p1.x, p1.y, p2.x, p2.y));
+}
+
+
+// from https://stackoverflow.com/a/38977789/2621028
+function line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
+{
+	 var ua, ub, denom = (y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1);
+	 if (denom == 0) {
+		  return null;
+	 }
+	 ua = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3))/denom;
+	 ub = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3))/denom;
+	 return {
+		  x: x1 + ua*(x2 - x1),
+		  y: y1 + ua*(y2 - y1),
+		  seg1: ua >= 0 && ua <= 1,
+		  seg2: ub >= 0 && ub <= 1
+	 };
+}
