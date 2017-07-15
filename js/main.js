@@ -9,6 +9,7 @@ function setupGameWorld() {
 	// put game-specific initialization in here
 	
 	game.player = new Player(50, 50);
+	game.world = new World();
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -20,16 +21,14 @@ function runGame() {
 function updateGame() {
 	// put code in here which handles the game logic (moving the player, etc.)
 	
-	// example code below (commented out)
-/*
-	var playerSpeed = 1;
-	if (keysHeld.left) {
-		game.playerCenter.x -= playerSpeed;
+	var player = game.player;
+	if (mouseState.button) {
+		player.velocity.offsetBy(mouseState.minus(player.body));
 	}
-	if (keysHeld.right) {
-		game.playerCenter.x += playerSpeed;
-	}
-*/
+	
+	var speed = 0.01;
+
+	player.body.offsetBy(player.velocity.times(speed));
 }
 
 function renderGame() {
@@ -37,6 +36,7 @@ function renderGame() {
 	clearScreen();
 	
 	game.player.render();
+	game.world.render();
 }
 
 function clearScreen() {

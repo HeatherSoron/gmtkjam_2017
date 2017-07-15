@@ -17,4 +17,6 @@ function initializeInput() {
 	document.addEventListener('keydown', handleKeyDown);
 	document.addEventListener('keyup', handleKeyUp);
 	canvas.addEventListener('mousemove', handleMouseMove);
+	canvas.addEventListener('mousedown', handleMouseDown);
+	canvas.addEventListener('mouseup', handleMouseUp);
 }

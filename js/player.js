@@ -1,5 +1,6 @@
 Class.makeClass(null, function Player(x, y) {
 	this.body = new GfxRect(x, y, 10, 10);
+	this.velocity = new Point();
 })
 
 Player.prototype.render = function() {

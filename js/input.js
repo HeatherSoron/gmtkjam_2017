@@ -1,5 +1,5 @@
 var keysHeld = {};
-var mouseState = {x: 0, y: 0};
+var mouseState = new Point(0,0); // we'll add some other data here, but we want Point methods
 
 function handleKeyDown(e) {
 	var keyName = keyMap[e.keyCode];
@@ -30,4 +30,18 @@ function clearKeyDown(keyName) {
 function handleMouseMove(e) {
 	mouseState.x = e.offsetX
 	mouseState.y = e.offsetY
+}
+
+function handleMouseDown(e) {
+	// only left click
+	if (e.button == 0) {
+		mouseState.button = true;
+	}
+}
+
+function handleMouseUp(e) {
+	// only left click
+	if (e.button == 0) {
+		mouseState.button = false;
+	}
 }
