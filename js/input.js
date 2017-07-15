@@ -1,4 +1,5 @@
 var keysHeld = {};
+var mouseState = {x: 0, y: 0};
 
 function handleKeyDown(e) {
 	var keyName = keyMap[e.keyCode];
@@ -24,4 +25,9 @@ function clearKeyDown(keyName) {
 	var down = keysHeld[keyName];
 	keysHeld[keyName] = false;
 	return down;
+}
+
+function handleMouseMove(e) {
+	mouseState.x = e.offsetX
+	mouseState.y = e.offsetY
 }
