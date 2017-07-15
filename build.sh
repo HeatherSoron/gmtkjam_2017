@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ./gen-includes > jade/scripts.jade
-jade index.jade
+./node_modules/jade/bin/jade.js index.jade
