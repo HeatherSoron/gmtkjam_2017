@@ -1,6 +1,10 @@
+Based on a previously-existing custom engine by the main programmer. See <https://github.com/ethankaminski/macej> for license details of that (still MIT).
+
+This project falls under the MIT license.
+
 The MIT License (MIT)
 
-Copyright (c) 2016 Ethan "Soron" Kaminski
+Copyright (c) 2016-2017 Ethan "Soron" Kaminski
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
