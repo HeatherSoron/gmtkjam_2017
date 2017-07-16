@@ -74,17 +74,19 @@ function updateGame() {
 		if (!player.anchor) {
 			var touch = mouseState.minus(new Point(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y))
 			var grapple = null;
+			var bestDist = Infinity;
 			for (var i = 0; i < game.grapples.length; ++i) {
 				var g = game.grapples[i];
-				if (g.contains(touch)) {
+				var dist = g.center().minus(touch).lenSqrd();
+				if (dist < bestDist) {
+					bestDist = dist;
 					grapple = g;
-					break;
 				}
 			}
 			game.glows.push(touch);
 			if (grapple) {
 				player.anchor = {
-					pos: touch,
+					pos: grapple.center(),
 					obj: grapple,
 				};
 			}

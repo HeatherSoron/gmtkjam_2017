@@ -6,6 +6,10 @@ Class.makeClass(Movable, function Spike(x, y) {
 });
 
 Spike.prototype.collisionCallback = function(event) {
+	if (this.velocity.lenSqrd() < 500000) {
+		return false;
+	}
+
 	if (event[2].block) {
 		var block = event[2].block;
 		this.killBlock(block);

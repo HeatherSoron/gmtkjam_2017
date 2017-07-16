@@ -108,6 +108,10 @@ Rectangle.prototype.contains = function(point) {
 	);
 }
 
+Rectangle.prototype.center = function() {
+	return new Point(this.left + this.width/2, this.top + this.height/2);
+}
+
 Rectangle.prototype.clone = function() {
 	return new Rectangle(this.left, this.top, this.width, this.height);
 }
