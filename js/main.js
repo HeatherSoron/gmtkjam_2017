@@ -7,6 +7,16 @@ var game = {};
 
 function setupGameWorld() {
 	// put game-specific initialization in here
+
+	game.images = {};
+	['floor.png'].forEach(function (filename) {
+		var image = new Image();
+		image.onload = function() {
+			image.loaded = true;
+		}
+		image.src = './images/' + filename;
+		game.images[filename] = image;
+	});
 	
 	game.world = new World();
 	

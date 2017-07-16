@@ -1,7 +1,8 @@
 Class.makeClass(null, function World() {
 	this.walls = [];
 	this.special = [];
-	var tileSize = 32;
+	this.sprites = [];
+	var tileSize = 100;
 	for (var i = 0; i < MAPDATA.length; ++i) {
 		for (var j = 0; j < MAPDATA[i].length; ++j) {
 			var tile = MAPDATA[i][j];
@@ -25,6 +26,14 @@ Class.makeClass(null, function World() {
 						kind: Object.keys(TILES).filter(key => TILES[key] == tile)[0],
 					});
 				}
+			}
+
+			switch (tile) {
+				case TILES.wall:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'floor.png'});
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -51,6 +60,13 @@ Class.makeClass(null, function World() {
 });
 
 World.prototype.render = function() {
+	this.sprites.forEach(function(sprite) {
+		var image = game.images[sprite.img];
+		if (image.loaded) {
+			ctx.drawImage(image, sprite.pos.x, sprite.pos.y);
+		}
+	});
+
 	this.walls.forEach(wall => wall.render());
 }
 
