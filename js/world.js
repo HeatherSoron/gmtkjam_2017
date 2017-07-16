@@ -31,7 +31,7 @@ Class.makeClass(null, function World() {
 
 			switch (tile) {
 				case TILES.wall:
-					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'floor.png'});
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'ground.png'});
 					break;
 				case TILES.grapple:
 					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'grapple.png'});

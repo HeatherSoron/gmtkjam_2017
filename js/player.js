@@ -1,5 +1,5 @@
 Class.makeClass(Movable, function Player(x, y) {
-	this.body = new GfxRect(x, y, tileSize * 0.8, tileSize * 0.8);
+	this.body = new Sprite(game.images['idlemag.png'], x, y, tileSize, tileSize * 2);
 	this.velocity = new Point();
 	this.friction = 0.01;
 	this.elasticity = 0.7;

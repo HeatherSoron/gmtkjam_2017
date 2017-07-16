@@ -10,9 +10,12 @@ function setupGameWorld() {
 
 	game.images = {};
 	[
-		'floor.png',
+		'ground.png',
 		'grapple.png',
 		'spikes.png',
+		'core.png',
+		'idlemag.png',
+		'magneticmag.png',
 	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
