@@ -8,6 +8,10 @@ var game = {};
 function setupGameWorld() {
 	// put game-specific initialization in here
 
+	game.bgm = new Audio('./audio/bgm.wav');
+	game.bgm.loop = true;
+	game.bgm.play();
+
 	game.images = {};
 	[
 		'ground.png',
