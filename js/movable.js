@@ -28,11 +28,40 @@ Movable.prototype.move = function() {
 		this.body.offsetBy(normal.times(-this.velocity.length() * speed));
 
 		this.velocity.offsetBy(normal.times(-2 * this.velocity.dot(normal)));
-		this.velocity.x *= this.elasticity;
-		this.velocity.y *= this.elasticity;
+
+		var rebound = this.elasticity;
+		// game-specific logic to make falling less bouncy than sideways rebounds
+		if (normal.y == 1) { // okay, clearly we have the winding *backwards*. Meh.
+			rebound *= 0.5;
+		}
+		this.velocity.x *= rebound;
+		this.velocity.y *= rebound;
 	}
 }
 
 Movable.prototype.render = function() {
 	this.body.render();
+	this.drawMagnetism();
+}
+
+Movable.prototype.drawMagnetism = function() {
+	if (this.mag) {
+		this.mag.forEach(mag => {
+			ctx.beginPath();
+
+			var center = this.body//.plus(new Point(tileSize * 0.8, tileSize * 0.8).times(0.5));
+			var vec = mag.obj.body.minus(center);
+			var rad = vec.length() * 0.5;
+			var angle = Math.atan2(vec.y, vec.x);
+			var arc = Math.min(Math.PI / 6, 25 / rad);
+			var gradient = ctx.createRadialGradient(center.x, center.y, rad, center.x, center.y, 0);
+			gradient.addColorStop(0,"rgba(255,0,0,0.0)");
+			gradient.addColorStop(1,"rgba(200,0,0," + (mag.power.length() / game.maxAttraction) +  ")");
+			ctx.fillStyle = gradient;
+			ctx.moveTo(center.x, center.y);
+			ctx.arc(center.x, center.y, rad, angle - arc/2, angle + arc/2);
+			//ctx.arc(center.x, center.y, rad, 0, 1);
+			ctx.fill();
+		});
+	}
 }

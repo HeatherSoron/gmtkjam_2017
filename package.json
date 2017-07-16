@@ -1,6 +1,14 @@
 {
+  "nexe": {
+    "input": "gen-map.js",
+    "output": "gen-map^$",
+    "runtime": {
+      "framework": "node"
+    }
+  },
   "dependencies": {
     "get-pixels": "^3.3.0",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "nexe": "^1.1.3"
   }
 }

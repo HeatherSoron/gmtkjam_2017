@@ -1,3 +1,19 @@
+Class.makeClass(Drawable, function Sprite(image, x, y, width, height) {
+	this.init();
+	
+	this.image = image;
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
+});
+
+Sprite.prototype.render = function() {
+	if (this.image.loaded) {
+		ctx.drawImage(this.image, this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+	}
+}
+
 Class.makeClass(Drawable, function GfxRect(x, y, width, height) {
 	this.init();
 

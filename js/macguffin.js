@@ -15,4 +15,6 @@ Macguffin.prototype.render = function() {
 	ctx.fillStyle = gradient;
 	ctx.arc(this.body.x, this.body.y, outerRad, 0, 2 * Math.PI);
 	ctx.fill();
+
+	this.drawMagnetism();
 }

@@ -12,6 +12,7 @@ function setupGameWorld() {
 	[
 		'floor.png',
 		'grapple.png',
+		'spikes.png',
 	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
@@ -29,6 +30,7 @@ function setupGameWorld() {
 	}
 
 	game.grapples = [];
+	game.spikes = [];
 
 	game.world.special.forEach(function(item) {
 		var constructor = specialDef[item.kind];
@@ -36,10 +38,13 @@ function setupGameWorld() {
 			game[item.kind] = new constructor(item.pos.x, item.pos.y);
 		} else if (item.kind == 'grapple') {
 			game.grapples.push(new Rectangle(item.pos.x - tileSize/2, item.pos.y - tileSize/2, tileSize, tileSize));
+		} else if (item.kind == 'spike') {
+			game.spikes.push(new Spike(item.pos.x, item.pos.y));
 		}
 	});
 
-	game.gravity = 20;
+	game.gravity = 40;
+	game.maxAttraction = 100;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -77,15 +82,46 @@ function updateGame() {
 			player.velocity.offsetBy(player.anchor.pos.minus(player.body));
 		}
 
+		player.mag = [];
+
 		var attraction = player.body.minus(game.core.body).times(10000 * 1 / player.body.sqrDistTo(game.core.body))
-		game.core.velocity.offsetBy(attraction);
-		//player.velocity.offsetBy(attraction.times(-1));
+		var pow = attraction.lenSqrd();
+		if (pow > 100) {
+			if (pow > game.maxAttraction * game.maxAttraction) {
+				attraction = attraction.normalize().times(game.maxAttraction);
+			}
+			game.core.velocity.offsetBy(attraction);
+			player.velocity.offsetBy(attraction.times(-1));
+
+
+			game.core.mag = [{obj: player, power: attraction}];
+			player.mag.push({obj: game.core, power: attraction});
+		}
+
+		game.spikes.forEach(function(spike) {
+			var attraction = player.body.minus(spike.body).times(10000 * 1 / player.body.sqrDistTo(spike.body))
+			var pow = attraction.lenSqrd();
+			if (pow > 100) {
+				if (pow > game.maxAttraction * game.maxAttraction) {
+					attraction = attraction.normalize().times(game.maxAttraction);
+				}
+				spike.velocity.offsetBy(attraction);
+				player.velocity.offsetBy(attraction.times(-1));
+
+				spike.mag = [{obj: player, power: attraction}];
+				player.mag.push({obj: spike, power: attraction});
+			}
+		});
 	} else {
 		player.anchor = null;
+		game.core.mag = null;
+		game.player.mag = null;
+		game.spikes.forEach(spike => spike.mag = null);
 	}
 
 	player.move();
 	game.core.move();
+	game.spikes.forEach(spike => spike.move());
 }
 
 function renderGame() {
@@ -96,6 +132,7 @@ function renderGame() {
 	ctx.translate(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y);
 	
 	game.player.render();
+	game.spikes.forEach(spike => spike.render());
 	game.core.render();
 	game.world.render();
 
