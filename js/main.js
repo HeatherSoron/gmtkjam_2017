@@ -147,6 +147,10 @@ function updateGame() {
 	player.move();
 	game.core.move();
 	game.spikes.forEach(spike => spike.move());
+
+	if (game.core.body.minus(game.goal.body).length() < game.core.body.width) {
+		win();
+	}
 }
 
 function renderGame() {
@@ -181,4 +185,12 @@ function clearScreen() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = '#151515';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function win() {
+	game.goal.render = function(){
+		ctx.fillStyle = 'yellow';
+		ctx.font = '25px Times New Roman';
+		ctx.fillText("YOU WON!", this.body.x, this.body.y)
+	};
 }
