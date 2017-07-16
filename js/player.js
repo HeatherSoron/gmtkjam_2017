@@ -13,7 +13,8 @@ Player.prototype.render = function() {
 	} else {
 		this.left = false;
 	}
-	if (mouseState.button) {
+	var vertSpinThreshold = 30;
+	if (mouseState.button || Math.abs(this.velocity.y) > vertSpinThreshold) {
 		this.body.image = game.images['magneticmag.png'];
 		this.body.height = tileSize * 1.5;
 		if ((game.tick % 10) >= 5) {
@@ -21,8 +22,15 @@ Player.prototype.render = function() {
 		} else {
 			this.body.frame = this.left ? 0 : 3;
 		}
-		var minRot = Math.PI / 6
-		this.rot += minRot;
+		if (this.anchor) {
+			var vec = this.anchor.pos.minus(this.body);
+			var rad = vec.length();
+			var angle = Math.atan2(vec.y, vec.x);
+			this.rot = this.left ? -angle : angle;
+		} else {
+			var minRot = Math.PI / 6
+			this.rot += minRot;
+		}
 	} else {
 		this.body.image = game.images['idlemag.png'];
 		this.body.height = tileSize * 2;
