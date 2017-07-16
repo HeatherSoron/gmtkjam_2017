@@ -1,8 +1,8 @@
 Class.makeClass(Movable, function Player(x, y) {
-	this.body = new GfxRect(x, y, 20, 20);
+	this.body = new GfxRect(x, y, tileSize * 0.8, tileSize * 0.8);
 	this.velocity = new Point();
 	this.friction = 0.01;
-	this.elasticity = 0.9;
+	this.elasticity = 0.7;
 })
 
 Player.prototype.render = function() {

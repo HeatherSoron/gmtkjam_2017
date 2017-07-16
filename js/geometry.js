@@ -96,6 +96,14 @@ Rectangle.prototype.intersects = function(other) {
 	);
 }
 
+Rectangle.prototype.contains = function(point) {
+	return (
+		this.left < point.x && this.right > point.x
+	&&
+		this.top < point.y && this.bottom > point.y
+	);
+}
+
 Rectangle.prototype.clone = function() {
 	return new Rectangle(this.left, this.top, this.width, this.height);
 }

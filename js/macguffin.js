@@ -2,7 +2,7 @@ Class.makeClass(Movable, function Macguffin(x,y) {
 	this.body = new GfxRect(x, y, 20, 20);
 	this.velocity = new Point();
 	this.friction = 0.01;
-	this.elasticity = 0.9;
+	this.elasticity = 0.7;
 });
 
 Macguffin.prototype.render = function() {

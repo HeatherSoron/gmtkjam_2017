@@ -9,7 +9,10 @@ function setupGameWorld() {
 	// put game-specific initialization in here
 
 	game.images = {};
-	['floor.png'].forEach(function (filename) {
+	[
+		'floor.png',
+		'grapple.png',
+	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
 			image.loaded = true;
@@ -25,9 +28,15 @@ function setupGameWorld() {
 		core: Macguffin,
 	}
 
+	game.grapples = [];
+
 	game.world.special.forEach(function(item) {
 		var constructor = specialDef[item.kind];
-		game[item.kind] = new constructor(item.pos.x, item.pos.y);
+		if (constructor) {
+			game[item.kind] = new constructor(item.pos.x, item.pos.y);
+		} else if (item.kind == 'grapple') {
+			game.grapples.push(new Rectangle(item.pos.x - tileSize/2, item.pos.y - tileSize/2, tileSize, tileSize));
+		}
 	});
 
 	game.gravity = 20;
@@ -45,13 +54,34 @@ function updateGame() {
 	var player = game.player;
 	if (mouseState.button) {
 		game.glows = [];
-		var touch = mouseState.minus(new Point(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y))
-		game.glows.push(touch);
-		player.velocity.offsetBy(touch.minus(player.body));
+		if (!player.anchor) {
+			var touch = mouseState.minus(new Point(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y))
+			var grapple = null;
+			for (var i = 0; i < game.grapples.length; ++i) {
+				var g = game.grapples[i];
+				if (g.contains(touch)) {
+					grapple = g;
+					break;
+				}
+			}
+			game.glows.push(touch);
+			if (grapple) {
+				player.anchor = {
+					pos: touch,
+					obj: grapple,
+				};
+			}
+		}
 
-		var attraction = player.body.minus(game.core.body).times(100 * 1 / player.body.distTo(game.core.body))
+		if (player.anchor) {
+			player.velocity.offsetBy(player.anchor.pos.minus(player.body));
+		}
+
+		var attraction = player.body.minus(game.core.body).times(10000 * 1 / player.body.sqrDistTo(game.core.body))
 		game.core.velocity.offsetBy(attraction);
-		player.velocity.offsetBy(attraction.times(-1));
+		//player.velocity.offsetBy(attraction.times(-1));
+	} else {
+		player.anchor = null;
 	}
 
 	player.move();

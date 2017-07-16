@@ -1,4 +1,4 @@
-var tileSize = 100;
+var tileSize = 50;
 Class.makeClass(null, function World() {
 	this.walls = [];
 	this.special = [];
@@ -20,18 +20,21 @@ Class.makeClass(null, function World() {
 				if (TILES.isWall(MAPDATA[i][j+1])) {
 					this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
 				}
+			}
 
-				if (TILES.isSpecial(tile)) {
-					this.special.push({
-						pos: new Point(tileSize * (j+0.5), tileSize * (i+0.5)),
-						kind: Object.keys(TILES).filter(key => TILES[key] == tile)[0],
-					});
-				}
+			if (TILES.isSpecial(tile)) {
+				this.special.push({
+					pos: new Point(tileSize * (j+0.5), tileSize * (i+0.5)),
+					kind: Object.keys(TILES).filter(key => TILES[key] == tile)[0],
+				});
 			}
 
 			switch (tile) {
 				case TILES.wall:
 					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'floor.png'});
+					break;
+				case TILES.grapple:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'grapple.png'});
 					break;
 				default:
 					break;
