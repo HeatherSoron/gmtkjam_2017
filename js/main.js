@@ -187,7 +187,7 @@ function renderGame() {
 
 function clearScreen() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = '#151515';
+	ctx.fillStyle = '#253525';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
