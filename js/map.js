@@ -10,6 +10,7 @@ var TILES = {
 	hangLeft: '<',
 	hangRight: '>',
 	breakable: 'b',
+	goal: '*',
 
 	isWall: function(t) {
 		return !t || ['wall', 'grapple'].map(key => this[key]).includes(t);
@@ -18,6 +19,6 @@ var TILES = {
 		return ['slopeLeft', 'slopeRight', 'hangLeft', 'hangRight'].map(key => this[key]).includes(t);
 	},
 	isSpecial: function(t) {
-		return ['spike', 'player', 'core', 'grapple'].map(key => this[key]).includes(t);
+		return ['goal', 'spike', 'player', 'core', 'grapple'].map(key => this[key]).includes(t);
 	},
 }

@@ -22,6 +22,7 @@ function setupGameWorld() {
 		'sloperight.png',
 		'hangleft.png',
 		'hangright.png',
+		'GOAL.png',
 	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
@@ -36,6 +37,7 @@ function setupGameWorld() {
 	var specialDef = {
 		player: Player,
 		core: Macguffin,
+		goal: Goal,
 	}
 
 	game.grapples = [];
@@ -108,7 +110,7 @@ function updateGame() {
 				attraction = attraction.normalize().times(game.maxAttraction);
 			}
 			game.core.velocity.offsetBy(attraction);
-			player.velocity.offsetBy(attraction.times(-1));
+			//player.velocity.offsetBy(attraction.times(-1));
 
 
 			game.core.mag = [{obj: player, power: attraction}];
@@ -154,6 +156,7 @@ function renderGame() {
 	ctx.save();
 	ctx.translate(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y);
 	
+	game.goal.render();
 	game.core.render();
 	game.spikes.forEach(spike => spike.render());
 	game.player.render();
