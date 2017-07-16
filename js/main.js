@@ -11,10 +11,12 @@ function setupGameWorld() {
 	game.images = {};
 	[
 		'ground.png',
+		'breakableground.png',
 		'grapple.png',
 		'spikes.png',
 		'core.png',
 		'idlemag.png',
+		'walkingmag.png',
 		'magneticmag.png',
 		'slopeleft.png',
 		'sloperight.png',
@@ -172,4 +174,6 @@ function renderGame() {
 
 function clearScreen() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = '#151515';
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

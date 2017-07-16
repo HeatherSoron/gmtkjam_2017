@@ -3,6 +3,7 @@ Class.makeClass(null, function World() {
 	this.walls = [];
 	this.special = [];
 	this.sprites = [];
+	var breakList = {};
 	for (var i = 0; i < MAPDATA.length; ++i) {
 		for (var j = 0; j < MAPDATA[i].length; ++j) {
 			var tile = MAPDATA[i][j];
@@ -37,6 +38,27 @@ Class.makeClass(null, function World() {
 						this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
 					}
 				}
+			}
+
+			if (tile == TILES.breakable) {
+				var breakWalls = [
+					new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)),
+					new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, j * tileSize)),
+					new Wall(new Point((i+1) * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)),
+					new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)),
+				];
+				var block = {pos: new Point(tileSize * j, tileSize * i), img: 'breakableground.png'};
+				breakWalls.forEach(wall => {
+					var p1 = wall.p2;
+					wall.p2 = wall.p1;
+					wall.p1 = p1;
+					wall.block = block;
+					this.walls.push(wall);
+				});
+				block.walls = breakWalls;
+				breakList[[i,j].join(',')] = {block: block, walls: breakWalls};
+				this.sprites.push(block);
+				
 			}
 
 			if (TILES.isSpecial(tile)) {
@@ -81,6 +103,32 @@ Class.makeClass(null, function World() {
 		wall.p2.x = x2;
 	});
 
+	for (var pos in breakList) {
+		var coords = pos.split(',').map(i => i-0);
+		var neighbors = [
+			breakList[[coords[0]-1, coords[1]].join(',')],
+			breakList[[coords[0]+1, coords[1]].join(',')],
+			breakList[[coords[0], coords[1]-1].join(',')],
+			breakList[[coords[0], coords[1]+1].join(',')],
+		];
+		var myWalls = breakList[pos].walls;
+		myWalls.forEach(wall => {
+			neighbors.forEach(neighbor => {
+				if (neighbor) {
+					neighbor.walls.forEach(other => {
+						if (other.p1.equals(wall.p2) && other.p2.equals(wall.p1)) {
+							console.log("disabled!");
+							wall.disable_if = other.block;
+						}
+					});
+				}
+			})
+		});
+	}
+	var blockWalls = this.walls.filter(w => w.block).forEach(wall => {
+		this.walls.filter
+	});
+
 });
 
 World.prototype.render = function() {
@@ -91,7 +139,7 @@ World.prototype.render = function() {
 		}
 	});
 
-	//this.walls.forEach(wall => wall.render());
+	this.walls.forEach(wall => wall.render());
 }
 
 Class.makeClass(null, function Wall(p1, p2) {
@@ -100,6 +148,9 @@ Class.makeClass(null, function Wall(p1, p2) {
 });
 
 Wall.prototype.render = function() {
+	if (this.disable_if && !this.disable_if.dead) {
+		return;
+	}
 	ctx.strokeStyle = 'blue';
 	ctx.beginPath();
 	ctx.moveTo(this.p1.x, this.p1.y);

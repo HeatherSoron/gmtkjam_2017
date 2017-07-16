@@ -9,6 +9,7 @@ var TILES = {
 	slopeRight: '\\',
 	hangLeft: '<',
 	hangRight: '>',
+	breakable: 'b',
 
 	isWall: function(t) {
 		return !t || ['wall', 'grapple'].map(key => this[key]).includes(t);
