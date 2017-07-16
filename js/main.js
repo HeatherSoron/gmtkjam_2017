@@ -16,6 +16,10 @@ function setupGameWorld() {
 		'core.png',
 		'idlemag.png',
 		'magneticmag.png',
+		'slopeleft.png',
+		'sloperight.png',
+		'hangleft.png',
+		'hangright.png',
 	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
@@ -85,7 +89,10 @@ function updateGame() {
 		}
 
 		if (player.anchor) {
-			player.velocity.offsetBy(player.anchor.pos.minus(player.body));
+			var diff = player.anchor.pos.minus(player.body)
+			var tangent = new Point(diff.y, -diff.x).normalize();
+			player.velocity.offsetBy(tangent.times(0.02 * tangent.dot(player.velocity)));
+			player.velocity.offsetBy(diff);
 		}
 
 		player.mag = [];
@@ -112,7 +119,7 @@ function updateGame() {
 					attraction = attraction.normalize().times(game.maxAttraction);
 				}
 				spike.velocity.offsetBy(attraction);
-				player.velocity.offsetBy(attraction.times(-1));
+				//player.velocity.offsetBy(attraction.times(-1));
 
 				spike.mag = [{obj: player, power: attraction}];
 				player.mag.push({obj: spike, power: attraction});
@@ -123,6 +130,12 @@ function updateGame() {
 		game.core.mag = null;
 		game.player.mag = null;
 		game.spikes.forEach(spike => spike.mag = null);
+
+		if (keysHeld['a']) {
+			player.velocity.x = -100;
+		} else if (keysHeld['d']) {
+			player.velocity.x = 100;
+		}
 	}
 
 	player.move();

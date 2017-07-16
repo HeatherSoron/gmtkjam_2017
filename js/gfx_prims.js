@@ -9,7 +9,7 @@ Class.makeClass(Drawable, function Sprite(image, x, y, width, height) {
 	this.frame = 0;
 });
 
-Sprite.scale = 2;
+Sprite.scale = 100/35;
 
 Sprite.prototype.render = function() {
 	if (this.image.loaded) {

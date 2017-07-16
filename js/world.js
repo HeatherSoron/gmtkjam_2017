@@ -1,4 +1,4 @@
-var tileSize = 50;
+var tileSize = 35;
 Class.makeClass(null, function World() {
 	this.walls = [];
 	this.special = [];
@@ -7,18 +7,35 @@ Class.makeClass(null, function World() {
 		for (var j = 0; j < MAPDATA[i].length; ++j) {
 			var tile = MAPDATA[i][j];
 			if (!TILES.isWall(tile)) {
-				// these will produce wall segments with a consistent winding. That's important for the sake of getting consistent normals, during collision detection.
-				if (MAPDATA[i-1] && TILES.isWall(MAPDATA[i-1][j])) {
-					this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)));
-				}
-				if (TILES.isWall(MAPDATA[i][j-1])) {
-					this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, j * tileSize)));
-				}
-				if (MAPDATA[i+1] && TILES.isWall(MAPDATA[i+1][j])) {
-					this.walls.push(new Wall(new Point((i+1) * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
-				}
-				if (TILES.isWall(MAPDATA[i][j+1])) {
-					this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
+				if (TILES.isSlope(tile)) {
+					switch(tile) {
+						case TILES.slopeLeft:
+							this.walls.push(new Wall(new Point((i+1) * tileSize, j * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
+							break;
+						case TILES.slopeRight:
+							this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
+							break;
+						case TILES.hangLeft:
+							this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point((i+1) * tileSize, j * tileSize)));
+							break;
+						case TILES.hangRight:
+							this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)));
+							break;
+					}
+				} else {
+					// these will produce wall segments with a consistent winding. That's important for the sake of getting consistent normals, during collision detection.
+					if (MAPDATA[i-1] && TILES.isWall(MAPDATA[i-1][j])) {
+						this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)));
+					}
+					if (TILES.isWall(MAPDATA[i][j-1])) {
+						this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, j * tileSize)));
+					}
+					if (MAPDATA[i+1] && TILES.isWall(MAPDATA[i+1][j])) {
+						this.walls.push(new Wall(new Point((i+1) * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
+					}
+					if (TILES.isWall(MAPDATA[i][j+1])) {
+						this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
+					}
 				}
 			}
 
@@ -30,6 +47,18 @@ Class.makeClass(null, function World() {
 			}
 
 			switch (tile) {
+				case TILES.slopeLeft:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'slopeleft.png'});
+					break;
+				case TILES.slopeRight:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'sloperight.png'});
+					break;
+				case TILES.hangLeft:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'hangleft.png'});
+					break;
+				case TILES.hangRight:
+					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'hangright.png'});
+					break;
 				case TILES.wall:
 					this.sprites.push({pos: new Point(tileSize * j, tileSize * i), img: 'ground.png'});
 					break;
