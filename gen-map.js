@@ -1,5 +1,9 @@
 #!/usr/bin/node
 
+// Part of a game jam toolchain + HTML5 engine created by Ethan "Soron" Kaminski. MIT license (c) 2017, see <https://github.com/ethankaminski/macej> for the full project
+
+// as of July 16 2017, this file has not yet been pushed to the Github repo - but it will be in a few days
+
 var getPixels = require('get-pixels');
 var fs = require('fs');
 
@@ -12,7 +16,6 @@ getPixels('./data/map.png', function(err, pixels) {
 	});
 
 	var shape = pixels.shape;
-	console.log(`Read ${shape[0]}x${shape[1]} pixels`);
 	var output = [];
 	for (var y = 0; y < shape[1]; ++y) {
 		var line = [];

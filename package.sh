@@ -1,3 +1,4 @@
 #!/bin/bash
 
-zip -r game.zip js/ *.html CREDITS LICENSE
+rm game.zip
+zip -r game.zip js/ data/ images/ *.html CREDITS LICENSE
