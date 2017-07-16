@@ -1,2 +1,5 @@
 index.html
 node_modules
+*.zip
+*.gif
+*.webm
