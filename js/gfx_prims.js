@@ -6,11 +6,14 @@ Class.makeClass(Drawable, function Sprite(image, x, y, width, height) {
 	this.y = y;
 	this.width = width;
 	this.height = height;
+	this.frame = 0;
 });
+
+Sprite.scale = 2;
 
 Sprite.prototype.render = function() {
 	if (this.image.loaded) {
-		ctx.drawImage(this.image, this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+		ctx.drawImage(this.image, this.width * this.frame * Sprite.scale, 0, this.width * Sprite.scale, this.height * Sprite.scale, this.x - this.width/2, this.y - this.height/2, this.width, this.height);
 	}
 }
 

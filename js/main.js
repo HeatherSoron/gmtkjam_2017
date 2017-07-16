@@ -48,6 +48,7 @@ function setupGameWorld() {
 
 	game.gravity = 40;
 	game.maxAttraction = 100;
+	game.tick = 0;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -58,6 +59,8 @@ function runGame() {
 
 function updateGame() {
 	// put code in here which handles the game logic (moving the player, etc.)
+
+	game.tick += 1;
 	
 	var player = game.player;
 	if (mouseState.button) {

@@ -3,10 +3,43 @@ Class.makeClass(Movable, function Player(x, y) {
 	this.velocity = new Point();
 	this.friction = 0.01;
 	this.elasticity = 0.7;
+
+	this.rot = 0;
 })
 
 Player.prototype.render = function() {
-	this.body.render();	
+	if (this.velocity.x < 0) {
+		this.left = true;
+	} else {
+		this.left = false;
+	}
+	if (mouseState.button) {
+		this.body.image = game.images['magneticmag.png'];
+		this.body.height = tileSize * 1.5;
+		if ((game.tick % 10) >= 5) {
+			this.body.frame = this.left ? 1 : 2;
+		} else {
+			this.body.frame = this.left ? 0 : 3;
+		}
+		var rotSpeed = this.velocity.length() / 1000;
+		var minRot = Math.PI / 12
+		if (rotSpeed < minRot) {
+			rotSpeed = minRot;
+		}
+		this.rot += rotSpeed;
+	} else {
+		this.body.image = game.images['idlemag.png'];
+		this.body.height = tileSize * 2;
+		this.body.frame = this.left ? 0 : 1;
+		this.rot = 0;
+	}
+
+	ctx.save();
+	ctx.translate(this.body.x, this.body.y);
+	ctx.rotate(this.rot);
+	ctx.translate(-this.body.x, -this.body.y);
+	this.body.render();
+	ctx.restore();
 
 	var dx = mouseState.x - this.body.x;
 	var dy = mouseState.y - this.body.y;
