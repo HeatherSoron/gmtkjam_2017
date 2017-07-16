@@ -21,12 +21,8 @@ Player.prototype.render = function() {
 		} else {
 			this.body.frame = this.left ? 0 : 3;
 		}
-		var rotSpeed = this.velocity.length() / 1000;
-		var minRot = Math.PI / 12
-		if (rotSpeed < minRot) {
-			rotSpeed = minRot;
-		}
-		this.rot += rotSpeed;
+		var minRot = Math.PI / 6
+		this.rot += minRot;
 	} else {
 		this.body.image = game.images['idlemag.png'];
 		this.body.height = tileSize * 2;
