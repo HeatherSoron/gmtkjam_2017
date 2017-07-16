@@ -27,6 +27,7 @@ function setupGameWorld() {
 		'hangleft.png',
 		'hangright.png',
 		'GOAL.png',
+		'background.png',
 	].forEach(function (filename) {
 		var image = new Image();
 		image.onload = function() {
@@ -188,6 +189,9 @@ function renderGame() {
 function clearScreen() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = '#253525';
+	if (game.images['background.png'].loaded) {
+		ctx.fillStyle = ctx.createPattern(game.images['background.png'], 'repeat');
+	}
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
