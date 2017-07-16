@@ -1,14 +1,15 @@
+var tileSize = 100;
 Class.makeClass(null, function World() {
 	this.walls = [];
 	this.special = [];
 	this.sprites = [];
-	var tileSize = 100;
 	for (var i = 0; i < MAPDATA.length; ++i) {
 		for (var j = 0; j < MAPDATA[i].length; ++j) {
 			var tile = MAPDATA[i][j];
 			if (!TILES.isWall(tile)) {
+				// these will produce wall segments with a consistent winding. That's important for the sake of getting consistent normals, during collision detection.
 				if (MAPDATA[i-1] && TILES.isWall(MAPDATA[i-1][j])) {
-					this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
+					this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)));
 				}
 				if (TILES.isWall(MAPDATA[i][j-1])) {
 					this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, j * tileSize)));
@@ -17,7 +18,7 @@ Class.makeClass(null, function World() {
 					this.walls.push(new Wall(new Point((i+1) * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
 				}
 				if (TILES.isWall(MAPDATA[i][j+1])) {
-					this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
+					this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
 				}
 
 				if (TILES.isSpecial(tile)) {
@@ -47,15 +48,6 @@ Class.makeClass(null, function World() {
 		wall.p2.y = wall.p2.x;
 		wall.p2.x = x2;
 	});
-	var verts = [
-		new Point(10, 10),
-		new Point(790, 10),
-		new Point(790, 590),
-		new Point(10, 590),
-	];
-	for (var i = 0; i < verts.length; ++i) {
-		this.walls.push(new Wall(verts[i+0], verts[(i+1)%verts.length]));
-	}
 
 });
 
@@ -63,7 +55,7 @@ World.prototype.render = function() {
 	this.sprites.forEach(function(sprite) {
 		var image = game.images[sprite.img];
 		if (image.loaded) {
-			ctx.drawImage(image, sprite.pos.x, sprite.pos.y);
+			ctx.drawImage(image, sprite.pos.x, sprite.pos.y, tileSize, tileSize);
 		}
 	});
 
