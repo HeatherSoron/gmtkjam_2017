@@ -137,9 +137,9 @@ function renderGame() {
 	ctx.save();
 	ctx.translate(canvas.width/2 - game.player.body.x, canvas.height/2 - game.player.body.y);
 	
-	game.player.render();
-	game.spikes.forEach(spike => spike.render());
 	game.core.render();
+	game.spikes.forEach(spike => spike.render());
+	game.player.render();
 	game.world.render();
 
 	if (mouseState.button) {
