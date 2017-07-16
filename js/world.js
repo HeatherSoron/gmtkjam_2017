@@ -91,7 +91,7 @@ World.prototype.render = function() {
 		}
 	});
 
-	this.walls.forEach(wall => wall.render());
+	//this.walls.forEach(wall => wall.render());
 }
 
 Class.makeClass(null, function Wall(p1, p2) {
