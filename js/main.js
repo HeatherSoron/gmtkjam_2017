@@ -62,6 +62,7 @@ function setupGameWorld() {
 	game.gravity = 40;
 	game.maxAttraction = 100;
 	game.tick = 0;
+	game.attractionPower = 100;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -108,7 +109,7 @@ function updateGame() {
 
 		player.mag = [];
 
-		var attraction = player.body.minus(game.core.body).times(10000 * 1 / player.body.sqrDistTo(game.core.body))
+		var attraction = player.body.minus(game.core.body).times(game.attractionPower * 1 / player.body.distTo(game.core.body))
 		var pow = attraction.lenSqrd();
 		if (pow > 100) {
 			if (pow > game.maxAttraction * game.maxAttraction) {
@@ -123,7 +124,7 @@ function updateGame() {
 		}
 
 		game.spikes.forEach(function(spike) {
-			var attraction = player.body.minus(spike.body).times(10000 * 1 / player.body.sqrDistTo(spike.body))
+			var attraction = player.body.minus(spike.body).times(game.attractionPower * 1 / player.body.distTo(spike.body))
 			var pow = attraction.lenSqrd();
 			if (pow > 100) {
 				if (pow > game.maxAttraction * game.maxAttraction) {
