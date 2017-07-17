@@ -11,7 +11,7 @@ function setupGameWorld() {
 	game.gravity = 40;
 	game.maxAttraction = 100;
 	game.attractionPower = 100;
-	game.maxLevel = 3;
+	game.maxLevel = 4;
 
 	game.bgm = new Audio('./audio/bgm.wav');
 	game.bgm.loop = true;
