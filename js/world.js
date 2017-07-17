@@ -1,12 +1,13 @@
-var tileSize = 35;
-Class.makeClass(null, function World() {
+var tileSize = 35; Class.makeClass(null, function World(level) {
 	this.walls = [];
 	this.special = [];
 	this.sprites = [];
 	var breakList = {};
-	for (var i = 0; i < MAPDATA.length; ++i) {
-		for (var j = 0; j < MAPDATA[i].length; ++j) {
-			var tile = MAPDATA[i][j];
+
+	var mapData = MAPS[level];
+	for (var i = 0; i < mapData.length; ++i) {
+		for (var j = 0; j < mapData[i].length; ++j) {
+			var tile = mapData[i][j];
 			if (!TILES.isWall(tile)) {
 				if (TILES.isSlope(tile)) {
 					switch(tile) {
@@ -25,16 +26,16 @@ Class.makeClass(null, function World() {
 					}
 				} else {
 					// these will produce wall segments with a consistent winding. That's important for the sake of getting consistent normals, during collision detection.
-					if (MAPDATA[i-1] && TILES.isWall(MAPDATA[i-1][j])) {
+					if (mapData[i-1] && TILES.isWall(mapData[i-1][j])) {
 						this.walls.push(new Wall(new Point(i * tileSize, (j+1) * tileSize), new Point(i * tileSize, j * tileSize)));
 					}
-					if (TILES.isWall(MAPDATA[i][j-1])) {
+					if (TILES.isWall(mapData[i][j-1])) {
 						this.walls.push(new Wall(new Point(i * tileSize, j * tileSize), new Point((i+1) * tileSize, j * tileSize)));
 					}
-					if (MAPDATA[i+1] && TILES.isWall(MAPDATA[i+1][j])) {
+					if (mapData[i+1] && TILES.isWall(mapData[i+1][j])) {
 						this.walls.push(new Wall(new Point((i+1) * tileSize, j * tileSize), new Point((i+1) * tileSize, (j+1) * tileSize)));
 					}
-					if (TILES.isWall(MAPDATA[i][j+1])) {
+					if (TILES.isWall(mapData[i][j+1])) {
 						this.walls.push(new Wall(new Point((i+1) * tileSize, (j+1) * tileSize), new Point(i * tileSize, (j+1) * tileSize)));
 					}
 				}

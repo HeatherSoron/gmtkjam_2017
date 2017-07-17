@@ -8,6 +8,11 @@ var game = {};
 function setupGameWorld() {
 	// put game-specific initialization in here
 
+	game.gravity = 40;
+	game.maxAttraction = 100;
+	game.attractionPower = 100;
+	game.maxLevel = 3;
+
 	game.bgm = new Audio('./audio/bgm.wav');
 	game.bgm.loop = true;
 	game.bgm.play();
@@ -20,7 +25,7 @@ function setupGameWorld() {
 		'spikes.png',
 		'core.png',
 		'idlemag.png',
-		'walkingmag.png',
+		//'walkingmag.png',
 		'magneticmag.png',
 		'slopeleft.png',
 		'sloperight.png',
@@ -36,8 +41,17 @@ function setupGameWorld() {
 		image.src = './images/' + filename;
 		game.images[filename] = image;
 	});
+
+	loadLevel(1);
 	
-	game.world = new World();
+	game.tick = 0;
+
+
+}
+
+function loadLevel(level) {
+	game.level = level;
+	game.world = new World(level);
 	
 	var specialDef = {
 		player: Player,
@@ -58,11 +72,6 @@ function setupGameWorld() {
 			game.spikes.push(new Spike(item.pos.x, item.pos.y));
 		}
 	});
-
-	game.gravity = 40;
-	game.maxAttraction = 100;
-	game.tick = 0;
-	game.attractionPower = 100;
 }
 
 // this is the main function which runs all of our game logic. The initialization code sets this up to be run periodically
@@ -197,9 +206,21 @@ function clearScreen() {
 }
 
 function win() {
-	game.goal.render = function(){
-		ctx.fillStyle = 'yellow';
-		ctx.font = '25px Times New Roman';
-		ctx.fillText("YOU WON!", this.body.x, this.body.y)
-	};
+	if (game.level < game.maxLevel) {
+		game.goal.render = function(){
+			ctx.fillStyle = 'yellow';
+			ctx.font = '25px Times New Roman';
+			ctx.fillText("Levels cleared: " + game.level + "/" + game.maxLevel, this.body.x, this.body.y)
+		};
+		setTimeout(function() {
+			loadLevel(game.level + 1);
+		}, 2000);
+		console.log("Won level, loading " + (game.level + 1));
+	} else {
+		game.goal.render = function(){
+			ctx.fillStyle = 'yellow';
+			ctx.font = '25px Times New Roman';
+			ctx.fillText("YOU WON!", this.body.x, this.body.y)
+		};
+	}
 }
