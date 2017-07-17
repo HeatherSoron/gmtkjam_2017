@@ -118,9 +118,10 @@ function updateGame() {
 
 		player.mag = [];
 
-		var attraction = player.body.minus(game.core.body).times(game.attractionPower * 1 / player.body.distTo(game.core.body))
+		var dist = player.body.distTo(game.core.body)
+		var attraction = player.body.minus(game.core.body).times(game.attractionPower * 1 / dist)
 		var pow = attraction.lenSqrd();
-		if (pow > 100) {
+		if (pow > 100 && (dist < 290 || game.core.mag)) {
 			if (pow > game.maxAttraction * game.maxAttraction) {
 				attraction = attraction.normalize().times(game.maxAttraction);
 			}
@@ -133,9 +134,10 @@ function updateGame() {
 		}
 
 		game.spikes.forEach(function(spike) {
-			var attraction = player.body.minus(spike.body).times(game.attractionPower * 1 / player.body.distTo(spike.body))
+			var dist = player.body.distTo(spike.body)
+			var attraction = player.body.minus(spike.body).times(game.attractionPower * 1 / dist)
 			var pow = attraction.lenSqrd();
-			if (pow > 100) {
+			if (pow > 100 && (dist < 290 || spike.mag)) {
 				if (pow > game.maxAttraction * game.maxAttraction) {
 					attraction = attraction.normalize().times(game.maxAttraction);
 				}
