@@ -11,7 +11,7 @@ function setupGameWorld() {
 	game.gravity = 40;
 	game.maxAttraction = 100;
 	game.attractionPower = 100;
-	game.maxLevel = 4;
+	game.maxLevel = 4; // level 5 is REALLY laggy due to inefficient grapple detection and a LOT of grapple points
 
 	game.bgm = new Audio('./audio/bgm.wav');
 	game.bgm.loop = true;
