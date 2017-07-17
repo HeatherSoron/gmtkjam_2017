@@ -17,6 +17,12 @@ function setupGameWorld() {
 	game.bgm.loop = true;
 	game.bgm.play();
 
+	game.grab_sfx = new Audio('./audio/grab.wav');
+	game.bgm.loop = true;
+
+	game.magbump_sfx = new Audio('./audio/mag_collision.wav');
+	game.ballbump_sfx = new Audio('./audio/ball_collision.wav');
+
 	game.images = {};
 	[
 		'ground.png',
@@ -116,6 +122,7 @@ function updateGame() {
 			player.velocity.offsetBy(diff);
 		}
 
+		var had_mag = player.mag && player.mag.length > 0;
 		player.mag = [];
 
 		var dist = player.body.distTo(game.core.body)
@@ -148,7 +155,14 @@ function updateGame() {
 				player.mag.push({obj: spike, power: attraction});
 			}
 		});
+
+		if (player.mag.length > 0 && !had_mag) {
+			game.grab_sfx.play();
+		}
 	} else {
+		if (game.player.mag && game.player.mag.length > 0) {
+			game.grab_sfx.pause();
+		}
 		player.anchor = null;
 		game.core.mag = null;
 		game.player.mag = null;
@@ -164,6 +178,16 @@ function updateGame() {
 	player.move();
 	game.core.move();
 	game.spikes.forEach(spike => spike.move());
+
+	if (player.bump) {
+		game.magbump_sfx.play();
+		game.magbump_sfx.currentTime = 0;
+	}
+
+	if (game.core.bump || game.spikes.filter(s => s.bump).length > 0) {
+		game.ballbump_sfx.play();
+		game.ballbump_sfx.currentTime = 0;
+	}
 
 	if (game.core.body.minus(game.goal.body).length() < game.core.body.width) {
 		win();

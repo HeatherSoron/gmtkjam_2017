@@ -61,6 +61,9 @@ Movable.prototype.move = function() {
 			this.velocity.y *= rebound;
 		}
 	}
+
+	this.collision_count = collisions.length;
+	this.bump = this.collision_count > 0 && this.velocity.lenSqrd() > 40000;
 }
 
 Movable.prototype.render = function() {
