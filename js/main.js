@@ -56,6 +56,7 @@ function setupGameWorld() {
 }
 
 function loadLevel(level) {
+	game.winTimer = null;
 	game.level = level;
 	game.world = new World(level);
 	
@@ -232,13 +233,16 @@ function clearScreen() {
 }
 
 function win() {
+	if (game.winTimer) {
+		return;
+	}
 	if (game.level < game.maxLevel) {
 		game.goal.render = function(){
 			ctx.fillStyle = 'yellow';
 			ctx.font = '25px Times New Roman';
 			ctx.fillText("Levels cleared: " + game.level + "/" + game.maxLevel, this.body.x, this.body.y)
 		};
-		setTimeout(function() {
+		game.winTimer = setTimeout(function() {
 			loadLevel(game.level + 1);
 		}, 2000);
 		console.log("Won level, loading " + (game.level + 1));
@@ -248,5 +252,6 @@ function win() {
 			ctx.font = '25px Times New Roman';
 			ctx.fillText("YOU WON!", this.body.x, this.body.y)
 		};
+		game.winTimer = true;
 	}
 }

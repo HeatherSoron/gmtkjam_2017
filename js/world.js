@@ -4,6 +4,7 @@ var tileSize = 35; Class.makeClass(null, function World(level) {
 	this.sprites = [];
 	var breakList = {};
 
+	console.log("Loading level: " + level);
 	var mapData = MAPS[level];
 	for (var i = 0; i < mapData.length; ++i) {
 		for (var j = 0; j < mapData[i].length; ++j) {
@@ -140,7 +141,8 @@ World.prototype.render = function() {
 		}
 	});
 
-	this.walls.forEach(wall => wall.render());
+	// debug drawing below
+	//this.walls.forEach(wall => wall.render());
 }
 
 Class.makeClass(null, function Wall(p1, p2) {
